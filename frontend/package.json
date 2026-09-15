@@ -1,0 +1,17 @@
+{
+  "name": "buildurgent-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BuildUrgent company website (buildurgent.com)",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "python3 ../server.py --port 9100 --host 127.0.0.1",
+    "serve": "python3 ../server.py --port 8080",
+    "test": "python3 -m pytest ../tests -q",
+    "lint:html": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

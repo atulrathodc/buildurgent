@@ -1,0 +1,3 @@
+# Ads.txt for buildurgent.com (authorized digital sellers)
+# Google AdSense publisher account used by the BuildUrgent site.
+google.com, pub-5119884908204834, DIRECT, f08c47fec0942fa0

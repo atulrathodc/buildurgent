@@ -32,6 +32,50 @@ $(document).ready(function(){
 			return false;
 		});
 	
+	// 1b. Slideable "Book a Demo" widget (right-edge drawer)
+		$(document).on('click', '.demo-widget-toggle', function () {
+			$(this).closest('.demo-widget').toggleClass('open');
+			return false;
+		});
+
+	// 1c. Slideable "Share" widget (right-edge drawer, same pattern)
+		$(document).on('click', '.share-widget-toggle', function () {
+			$(this).closest('.share-widget').toggleClass('open');
+			return false;
+		});
+
+	// 1d. jsSocials (third-party jQuery share plugin) — renders the actual
+		// share buttons inside #share-socials. Purely client-side (no account or
+		// backend): each network builds its own share URL from the live page URL
+		// and opens in a new tab. Must run after jQuery + the jsSocials script
+		// (both loaded before custom.js). LinkedIn is OVERRIDDEN here (not
+		// jsSocials' built-in network): 1.5.0's built-in handler builds the
+		// DEPRECATED shareArticle endpoint, which LinkedIn no longer honors and
+		// opens an EMPTY panel. The modern endpoint only takes a `url` parameter:
+		// https://www.linkedin.com/sharing/share-offsite/?url=<encodedUrl>.
+		// Wrap in try/catch so a CDN hiccup can never break the rest of the page.
+		if ($('#share-socials').length) {
+			try {
+				$('#share-socials').jsSocials({
+					showLabel: false,
+					showCount: false,
+					shares: [
+						{ share: 'twitter', label: 'X / Twitter' },
+						{ share: 'facebook', label: 'Facebook' },
+						{
+							share: 'linkedin',
+							label: 'LinkedIn',
+							logo: 'fa fa-linkedin',
+							shareUrl: function () {
+								return 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href);
+							}
+						},
+						{ share: 'whatsapp', label: 'WhatsApp' }
+					]
+				});
+			} catch (e) { /* jsSocials unavailable; share buttons simply not rendered */ }
+		}
+	
 	
 	
 	// 2. Smooth Scroll spy
@@ -40,14 +84,103 @@ $(document).ready(function(){
            topSpacing:0
         });
 		
-		//=============
+		// ONE delegated handler for every `a[href^="#"]` on the page: the header
+		// nav, the hero CTAs, the service/showcase tiles and the footer links.
+		// The old handler only bound `li.smooth-menu a`, so every other anchor
+		// fell through to the browser's own jump - and none of them accounted for
+		// the fixed navbar:
+		//
+		//   * the navbar is `position: fixed` and ~190px tall, so scrolling to a
+		//     bare `offset().top` parked the section heading BEHIND it - the
+		//     "does not scroll to the right content" symptom;
+		//   * the offset is therefore read LIVE from the navbar (+ gap) instead of
+		//     hard-coded, so it stays correct at every breakpoint;
+		//   * both roots are animated: whichever of html/body is the scroll
+		//     container for the current layout is in the set.
+		var NAV_GAP = 16; // breathing room between the navbar and the heading
 
-		$('li.smooth-menu a').bind("click", function(event) {
+		function navOffset() {
+			var $nav = $('nav.navbar.bootsnav');
+			return ($nav.length ? $nav.outerHeight() : 0) + NAV_GAP;
+		}
+
+		// `navToken` is bumped by a new navigation and by real scroll INPUT
+		// (wheel / touch / key, none of which programmatic scrolling dispatches),
+		// so an outdated re-snap chain aborts instead of fighting the user.
+		var navToken = 0;
+
+		function align(el, duration, attempts, token) {
+			if (token !== navToken) { return; }
+
+			var top = Math.max(0, Math.round($(el).offset().top - navOffset())),
+				current = Math.round($(window).scrollTop());
+
+			if (Math.abs(current - top) > 4) {
+				$('html, body').stop().animate({
+					scrollTop: top
+				}, duration === undefined ? 250 : duration);
+			}
+
+			if (attempts) {
+				window.setTimeout(function () {
+					align(el, 250, attempts - 1, token);
+				}, 300);
+			}
+		}
+
+		// the user is in control the moment they touch wheel / trackpad / keyboard
+		$(window).on('wheel touchstart keydown', function () {
+			navToken++;
+		});
+
+		$(window).on('load', function () {
+			var el;
+			if (location.hash.length > 1) {
+				el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+				if (el) {
+					align(el, 0, 6, navToken); // instant: this corrects the browser's own jump
+				}
+			}
+		});
+
+		$(document).on('click', 'a[href^="#"]', function (event) {
+			var href = $(this).attr('href'),
+				el,
+				top;
+
+			if (!href || href === '#') {
+				return; // a bare "#" is not a target: leave the default alone
+			}
+
+			el = document.getElementById(decodeURIComponent(href.slice(1)));
+			if (!el) {
+				return;
+			}
+
 			event.preventDefault();
-			var anchor = $(this);
+
+			// a new navigation supersedes any re-snap still scheduled by the
+			// previous one (see `navToken` in align())
+			navToken++;
+
+			top = Math.max(0, Math.round($(el).offset().top - navOffset()));
 			$('html, body').stop().animate({
-				scrollTop: $(anchor.attr('href')).offset().top - 0
-			}, 1200,'easeInOutExpo');
+				scrollTop: top
+			}, 900, 'easeInOutExpo', function () {
+				align(el, 250, 6, navToken);
+			});
+
+			// close the mobile menu: the target must actually be visible once it lands
+			var $openMenu = $('.navbar-collapse.in');
+			if ($openMenu.length && $.fn.collapse) {
+				$openMenu.collapse('hide');
+			}
+
+			// keep the URL shareable, but with pushState so the browser does not
+			// jump again (which would undo the header offset above)
+			if (window.history && history.pushState) {
+				history.pushState(null, '', href);
+			}
 		});
 		
 		$('body').scrollspy({

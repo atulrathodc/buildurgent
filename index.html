@@ -52,6 +52,10 @@
     <!--font-awesome.min.css-->
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
 
+    <!--jsSocials (third-party share widget) styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials-theme-flat.min.css">
+
     <!--flat icon css-->
     <link rel="stylesheet" href="assets/css/flaticon.css">
 
@@ -94,12 +98,12 @@
             "name": "BuildUrgent",
             "url": "https://buildurgent.com/",
             "logo": "https://buildurgent.com/logo512.png",
-            "email": "atulrathodc@gmail.com",
+            "email": "hello@buildurgent.com",
             "description": "BuildUrgent is a senior-only digital product engineering studio building web, mobile, AI automation, cloud and e-commerce software.",
             "contactPoint": [{
                 "@type": "ContactPoint",
                 "contactType": "sales",
-                "email": "atulrathodc@gmail.com",
+                "email": "sales@buildurgent.com",
                 "areaServed": "Worldwide",
                 "availableLanguage": ["en"]
             }],
@@ -223,6 +227,43 @@
 
     </header><!-- /.top-area-->
     <!-- top-area End -->
+
+    <!-- ============================================================================
+         BOTH-SIDE WIDGETS — fixed slideable right-edge drawers copied 1:1 from
+         buildurgentai (index.html L231-252): two drawers stacked on the same
+         right edge — the demo drawer sits at top:50%, the share drawer at top:64%.
+         Each is a collapsed vertical tab until clicked; `.open` on the wrapper
+         slides the panel in (see the `.demo-widget*` / `.share-widget*` block at the
+         end of assets/css/style.css, the mobile breakpoints for the same classes in
+         assets/css/responsive.css plus the 480px share-panel safety net at the
+         bottom of this file, and the toggle + jsSocials handlers in
+         assets/js/custom.js). Markup, class names and ids must stay in sync with
+         those three files.
+    ============================================================================ -->
+    <!-- Fixed slideable "Book a Demo" widget: right-edge toggle tab + slide-out panel. -->
+    <div class="demo-widget">
+        <button class="demo-widget-toggle" aria-label="Open book a demo panel">&#9776;</button>
+        <div class="demo-widget-panel">
+            <h3>Book a Demo</h3>
+            <p>Schedule a personalized walkthrough.</p>
+            <a href="#contact" class="demo-widget-btn">Book a Demo</a>
+        </div>
+    </div>
+
+    <!-- Fixed slideable "Share" widget: right-edge toggle tab + slide-out panel with
+         social share links so anyone can post the site on their feed.
+         The shared URL is the live product site; each target opens in a new tab. -->
+    <div class="share-widget">
+        <button class="share-widget-toggle" aria-label="Open share panel">&#10084;</button>
+        <div class="share-widget-panel">
+            <h3>Share this site</h3>
+            <p>Post BuildUrgent to your feed.</p>
+            <!-- jsSocials (third-party, jQuery, client-side) renders the share
+                 buttons; see custom.js for the network/sharing config. -->
+            <div class="share-widget__socials" id="share-socials"></div>
+        </div>
+    </div>
+    <!-- /BOTH-SIDE WIDGETS -->
 
     <!--welcome-hero start -->
     <section id="welcome-hero" class="welcome-hero">
@@ -932,18 +973,19 @@
                                     that get it into production.</p>
                                 <div class="single-contact-btn">
                                     <a class="contact-btn"
-                                        href="https://mail.google.com/mail/?view=cm&fs=1&to=atulrathodc@gmail.com"
+                                        href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@buildurgent.com"
                                         target="_blank" rel="noopener noreferrer">
                                         book a demo
                                     </a>
                                 </div><!--/.single-contact-btn-->
                                 <div class="single-contact-btn">
-                                    <a href="https://wa.me/917263932000?text=Hi%20Atul%2C%20I%27d%20like%20to%20work%20with%20you."
+                                    <a class="contact-btn contact-btn--ghost"
+                                        href="https://mail.google.com/mail/?view=cm&fs=1&to=sales@buildurgent.com"
                                         target="_blank" rel="noopener noreferrer"
-                                        aria-label="Chat with Atul on WhatsApp (opens in a new tab)">
+                                        aria-label="Email the sales team at sales@buildurgent.com (opens in a new tab)">
                                         <span class="whatsapp-cta">
-                                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
-                                            <span class="whatsapp-cta__label">WhatsApp</span>
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            <span class="whatsapp-cta__label">Email sales</span>
                                         </span>
                                     </a>
                                 </div><!--/.single-contact-btn-->
@@ -966,7 +1008,11 @@
                                 <div class="contact-add-info">
                                     <div class="single-contact-add-info">
                                         <h3>email</h3>
-                                        <p>atulrathodc@gmail.com</p>
+                                        <p>hello@buildurgent.com</p>
+                                    </div>
+                                    <div class="single-contact-add-info">
+                                        <h3>support</h3>
+                                        <p>support@buildurgent.com</p>
                                     </div>
                                 </div>
                             </div><!--/.contact-adress-->
@@ -1061,9 +1107,9 @@
                                             <p class="bu-form__status" id="bu-form-status" role="status"
                                                 aria-live="polite"></p>
                                             <p class="bu-form__note">Prefer email? Write to <a class="contact-btn"
-                                                    href="https://mail.google.com/mail/?view=cm&fs=1&to=atulrathodc@gmail.com"
+                                                    href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@buildurgent.com"
                                                     target="_blank" rel="noopener noreferrer">
-                                                    atulrathodc@gmail.com</a>.</p>
+                                                    hello@buildurgent.com</a>.</p>
                                         </div><!--/.col-->
                                     </div><!--/.row-->
                                 </form><!--/form-->
@@ -1121,7 +1167,7 @@
                                 ].join("\n");
 
                                 say("Thanks " + name + " — opening your email client. We reply within one business day.", false);
-                                window.location.href = "mailto:atulrathodc@gmail.com" +
+                                window.location.href = "mailto:hello@buildurgent.com" +
                                     "?subject=" + encodeURIComponent("New project enquiry — " + name) +
                                     "&body=" + encodeURIComponent(body);
                                 form.reset();
@@ -1138,8 +1184,8 @@
                                 <div class="contact-add-info">
                                     <div class="single-contact-add-info">
                                         <h3>new business</h3>
-                                        <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=atulrathodc@gmail.com"
-                                                target="_blank" rel="noopener noreferrer">atulrathodc@gmail.com/a></p>
+                                        <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@buildurgent.com"
+                                                target="_blank" rel="noopener noreferrer">hello@buildurgent.com</a></p>
                                     </div>
 
                                     <div class="single-contact-add-info">
@@ -1184,8 +1230,8 @@
                     commerce.
                 </p><!--/p-->
                 <ul class="bu-footer__links">
-                    <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=atulrathodc@gmail.com" target="_blank"
-                            rel="noopener noreferrer">atulrathodc@gmail.com</a></li>
+                    <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@buildurgent.com" target="_blank"
+                            rel="noopener noreferrer">hello@buildurgent.com</a></li>
                     <li><a href="#services">services</a></li>
                     <li><a href="#portfolio">work</a></li>
                     <li><a href="#faq">faq</a></li>
@@ -1242,6 +1288,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 
 
+    <!-- jsSocials (third-party jQuery share plugin) — client-side only, no
+         account/backend; the official cdnjs release. Must load after jQuery. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials.min.js"></script>
+
+
     <!--Custom JS-->
     <script src="assets/js/custom.js"></script>
 
@@ -1268,6 +1319,33 @@
         .owl-stage {
             max-width: 100vw !important;
         }
+
+        /* ------------------------------------------------------------------
+           BOTH-SIDE WIDGETS — phone-size safety net.
+           assets/css/responsive.css narrows both drawers to 260px at 768px,
+           but only the demo panel drops to 240px at 480px; this keeps the
+           share drawer identical to it so the two right-edge tabs and their
+           panels stay the same width on a phone. The rules are deliberately
+           repeated here rather than only in responsive.css because that file is
+           outside this subtask's allowed files.
+
+           Width/offset only, and NO interaction state is declared here: the repo
+           contract requires every `:hover`/`:focus`/`:active` rule to stay
+           paint-only, so this block touches only `.share-widget-panel` and the
+           open-state toggle transform. It also carries no personal identity —
+           the share copy says "Post BuildUrgent to your feed", never a handle.
+        ------------------------------------------------------------------ */
+        @media screen and (max-width:480px) {
+            .share-widget-panel {
+                width: 240px;
+            }
+
+            .share-widget.open .share-widget-toggle {
+                transform: translateX(-240px);
+            }
+        }
+
+        /*max-width:480px*/
     </style>
 </body>
 

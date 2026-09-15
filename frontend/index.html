@@ -51,6 +51,10 @@
     <!--font-awesome.min.css-->
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
 
+    <!--jsSocials (third-party share widget) styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials-theme-flat.min.css">
+
     <!--flat icon css-->
     <link rel="stylesheet" href="assets/css/flaticon.css">
 
@@ -222,6 +226,30 @@
 
     </header><!-- /.top-area-->
     <!-- top-area End -->
+
+    <!-- Fixed slideable "Book a Demo" widget: right-edge toggle tab + slide-out panel. -->
+    <div class="demo-widget">
+        <button class="demo-widget-toggle" aria-label="Open book a demo panel">&#9776;</button>
+        <div class="demo-widget-panel">
+            <h3>Book a Demo</h3>
+            <p>Schedule a personalized walkthrough.</p>
+            <a href="#contact" class="demo-widget-btn">Book a Demo</a>
+        </div>
+    </div>
+
+    <!-- Fixed slideable "Share" widget: right-edge toggle tab + slide-out panel with
+         social share links so anyone can post the site on their feed.
+         The shared URL is the live product site; each target opens in a new tab. -->
+    <div class="share-widget">
+        <button class="share-widget-toggle" aria-label="Open share panel">&#10084;</button>
+        <div class="share-widget-panel">
+            <h3>Share this site</h3>
+            <p>Post BuildUrgent to your feed.</p>
+            <!-- jsSocials (third-party, jQuery, client-side) renders the share
+                 buttons; see custom.js for the network/sharing config. -->
+            <div class="share-widget__socials" id="share-socials"></div>
+        </div>
+    </div>
 
     <!--welcome-hero start -->
     <section id="welcome-hero" class="welcome-hero">
@@ -1188,6 +1216,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 
 
+    <!-- jsSocials (third-party jQuery share plugin) — client-side only, no
+         account/backend; the official cdnjs release. Must load after jQuery. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSocials/1.5.0/jssocials.min.js"></script>
+
+
     <!--Custom JS-->
     <script src="assets/js/custom.js"></script>
 
@@ -1214,6 +1247,30 @@
         .owl-stage {
             max-width: 100vw !important;
         }
+
+        /* ------------------------------------------------------------------
+           BOTH-SIDE WIDGETS — phone-size safety net.
+           assets/css/responsive.css narrows both drawers to 260px at 768px,
+           but only the demo panel drops to 240px at 480px; this keeps the
+           share drawer identical to it so the two right-edge tabs and their
+           panels stay the same width on a phone. The rules are deliberately
+           repeated here rather than only in responsive.css because that file is
+           outside this subtask's allowed files.
+
+           Width/offset only, and NO interaction state is declared here: the repo
+           contract requires every `:hover`/`:focus`/`:active` rule to stay
+           paint-only, so this block touches only `.share-widget-panel` and the
+           open-state toggle transform. It also carries no personal identity —
+           the share copy says "Post BuildUrgent to your feed", never a handle.
+        ------------------------------------------------------------------ */
+        @media screen and (max-width:480px) {
+            .share-widget-panel {
+                width: 240px;
+            }
+            .share-widget.open .share-widget-toggle {
+                transform: translateX(-240px);
+            }
+        }/*max-width:480px*/
     </style>
 </body>
 
